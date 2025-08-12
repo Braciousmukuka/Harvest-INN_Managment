@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'HarvestInn'),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +122,18 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Currency
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the default currency for the application.
+    | This will be used for displaying prices and financial information.
+    |
+    */
+
+    'currency' => env('APP_CURRENCY', 'ZMW'),
+    'currency_symbol' => env('APP_CURRENCY_SYMBOL', 'ZMW'),
 
 ];

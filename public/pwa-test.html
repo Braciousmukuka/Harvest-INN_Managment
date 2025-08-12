@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Install Test - HarvestInn</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .install-btn {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            animation: pulse 2s infinite;
+        }
+        .help-btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .feature-list {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🌾 HarvestInn PWA Installation</h1>
+        <p>Your farm management system is now available as a downloadable app!</p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="install-btn" onclick="testInstall()">
+                📱 Install HarvestInn App
+            </button>
+            <button class="help-btn" onclick="showHelp()">
+                ❓ How to Install
+            </button>
+        </div>
+
+        <div class="feature-list">
+            <h3>✨ App Features:</h3>
+            <ul>
+                <li>🚀 <strong>Install on any device</strong> - Phone, tablet, or desktop</li>
+                <li>📶 <strong>Works offline</strong> - Access your data without internet</li>
+                <li>⚡ <strong>Fast loading</strong> - Cached for instant access</li>
+                <li>🏠 <strong>Home screen icon</strong> - Quick access like a native app</li>
+                <li>📊 <strong>Full functionality</strong> - Complete farm management</li>
+                <li>🔄 <strong>Auto-sync</strong> - Updates when back online</li>
+            </ul>
+        </div>
+
+        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h4>📋 Installation Guide:</h4>
+            <p><strong>Desktop Chrome/Edge:</strong> Look for "Install" button in address bar</p>
+            <p><strong>Mobile Safari:</strong> Tap Share → "Add to Home Screen"</p>
+            <p><strong>Android Chrome:</strong> Tap menu → "Add to Home screen"</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/dashboard" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                🏡 Go to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function testInstall() {
+            alert('PWA Install function called! In a real browser, this would trigger the app installation.');
+        }
+
+        function showHelp() {
+            alert('Help modal would open here with detailed installation instructions for different devices.');
+        }
+    </script>
+</body>
+</html>

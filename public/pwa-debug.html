@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Debug - HarvestInn</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#087112">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        button { padding: 10px 20px; margin: 10px 0; background: #087112; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #install-btn { display: none; }
+    </style>
+</head>
+<body>
+    <h1>🔧 PWA Installation Debug</h1>
+    <p>This page helps diagnose why the PWA install button might not appear in your browser's address bar.</p>
+    
+    <div id="checks"></div>
+    
+    <button id="install-btn">Install PWA (Custom Button)</button>
+    <button onclick="location.reload()">Refresh Checks</button>
+    <button onclick="window.open('/', '_blank')">Open Main App</button>
+    
+    <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+        const checksDiv = document.getElementById('checks');
+        
+        function addCheck(title, condition, message) {
+            const div = document.createElement('div');
+            div.className = `status ${condition ? 'success' : 'error'}`;
+            div.innerHTML = `<strong>${title}:</strong> ${message}`;
+            checksDiv.appendChild(div);
+        }
+        
+        function addWarning(title, message) {
+            const div = document.createElement('div');
+            div.className = 'status warning';
+            div.innerHTML = `<strong>${title}:</strong> ${message}`;
+            checksDiv.appendChild(div);
+        }
+        
+        // Run checks
+        document.addEventListener('DOMContentLoaded', function() {
+            checksDiv.innerHTML = '<h3>Running PWA Installation Checks...</h3>';
+            
+            // Basic requirements
+            addCheck('HTTPS/Localhost', 
+                location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1',
+                location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1' 
+                    ? '✅ Running on secure context' 
+                    : '❌ PWA requires HTTPS or localhost'
+            );
+            
+            addCheck('Service Worker Support',
+                'serviceWorker' in navigator,
+                'serviceWorker' in navigator ? '✅ Browser supports Service Workers' : '❌ Browser does not support Service Workers'
+            );
+            
+            addCheck('Manifest Support',
+                'onbeforeinstallprompt' in window,
+                'onbeforeinstallprompt' in window ? '✅ Browser supports PWA installation' : '❌ Browser does not support beforeinstallprompt'
+            );
+            
+            // Check if already installed
+            addCheck('Not Already Installed',
+                !window.matchMedia('(display-mode: standalone)').matches,
+                !window.matchMedia('(display-mode: standalone)').matches 
+                    ? '✅ App is not yet installed' 
+                    : '⚠️ App is already installed (running in standalone mode)'
+            );
+            
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        addCheck('Service Worker Registration', true, '✅ Service Worker registered successfully');
+                        return fetch('/manifest.json');
+                    })
+                    .then(response => {
+                        addCheck('Manifest Accessible', response.ok, response.ok ? '✅ Manifest.json is accessible' : '❌ Cannot load manifest.json');
+                        return response.json();
+                    })
+                    .then(manifest => {
+                        addCheck('Manifest Valid', manifest.name && manifest.icons && manifest.icons.length > 0, 
+                            manifest.name && manifest.icons ? '✅ Manifest contains required fields' : '❌ Manifest missing required fields');
+                        
+                        // Check for 192px and 512px icons
+                        const has192 = manifest.icons.some(icon => icon.sizes.includes('192'));
+                        const has512 = manifest.icons.some(icon => icon.sizes.includes('512'));
+                        addCheck('Required Icons', has192 && has512, 
+                            has192 && has512 ? '✅ Has required 192px and 512px icons' : '❌ Missing required icon sizes (192px and 512px)');
+                    })
+                    .catch(function(err) {
+                        addCheck('Service Worker/Manifest', false, '❌ Error: ' + err.message);
+                    });
+            }
+            
+            // Add browser-specific notes
+            setTimeout(() => {
+                const userAgent = navigator.userAgent.toLowerCase();
+                if (userAgent.includes('chrome') && !userAgent.includes('edg')) {
+                    addWarning('Chrome Note', 'Chrome may require user engagement (clicking on the page) before showing install prompt');
+                } else if (userAgent.includes('firefox')) {
+                    addWarning('Firefox Note', 'Firefox supports PWA but install button appears in address bar menu (not automatically)');
+                } else if (userAgent.includes('safari')) {
+                    addWarning('Safari Note', 'Safari uses "Add to Home Screen" instead of PWA install prompt');
+                } else if (userAgent.includes('edg')) {
+                    addWarning('Edge Note', 'Edge should show install button in address bar or Settings menu');
+                }
+                
+                addWarning('General Tips', 'Try: 1) Refresh the page, 2) Click somewhere on the page first, 3) Check browser address bar menu, 4) Visit the main app page');
+            }, 1000);
+        });
+        
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-block';
+            
+            const div = document.createElement('div');
+            div.className = 'status success';
+            div.innerHTML = '<strong>🎉 Install Prompt Available:</strong> The beforeinstallprompt event fired! Custom install button is now visible.';
+            checksDiv.appendChild(div);
+        });
+        
+        // Handle custom install button
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                const div = document.createElement('div');
+                div.className = `status ${outcome === 'accepted' ? 'success' : 'warning'}`;
+                div.innerHTML = `<strong>Install Result:</strong> User ${outcome} the install prompt`;
+                checksDiv.appendChild(div);
+                
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+        
+        window.addEventListener('appinstalled', () => {
+            const div = document.createElement('div');
+            div.className = 'status success';
+            div.innerHTML = '<strong>🎉 App Installed:</strong> PWA was successfully installed!';
+            checksDiv.appendChild(div);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+/**
+ * Custom theme colors for HarvestINN
+ * Primary: #087112 (Green)
+ * Secondary: #fab200 (Gold)
+ */
+
+.btn-primary,
+.bg-primary {
+  background-color: #087112 !important;
+  border-color: #087112 !important;
+}
+
+.btn-secondary,
+.bg-secondary {
+  background-color: #fab200 !important;
+  border-color: #fab200 !important;
+}
+
+.btn-outline-primary {
+  color: #087112 !important;
+  border-color: #087112 !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: #087112 !important;
+  color: #ffffff !important;
+}
+
+.btn-outline-secondary {
+  color: #fab200 !important;
+  border-color: #fab200 !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #fab200 !important;
+  color: #ffffff !important;
+}
+
+.text-primary {
+  color: #087112 !important;
+}
+
+.text-secondary {
+  color: #fab200 !important;
+}
+
+.border-primary {
+  border-color: #087112 !important;
+}
+
+.border-secondary {
+  border-color: #fab200 !important;
+}
+
+.link-primary {
+  color: #087112 !important;
+}
+
+.link-primary:hover {
+  color: #065d0e !important;
+}
+
+.link-secondary {
+  color: #fab200 !important;
+}
+
+.link-secondary:hover {
+  color: #e59e00 !important;
+}
+
+.nav-link.active,
+.navbar-nav .nav-item.active .nav-link {
+  color: #087112 !important;
+}
+
+.footer-link a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.footer-link a:hover {
+  color: #fab200 !important;
+}
+
+/* Adding hover effects to buttons */
+.btn-primary:hover {
+  background-color: #065d0e !important;
+  border-color: #065d0e !important;
+}
+
+.btn-secondary:hover {
+  background-color: #e59e00 !important;
+  border-color: #e59e00 !important;
+}
+
+/* Progress bars */
+.progress-bar-primary {
+  background-color: #087112 !important;
+}
+
+.progress-bar-secondary {
+  background-color: #fab200 !important;
+}

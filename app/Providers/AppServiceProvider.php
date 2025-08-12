@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (config('app.env') === 'production') {
+            \URL::forceScheme('https');
+        }
+        
+        // Share recent products with dashboard view
+        View::composer('dashboard', function ($view) {
+            $recentProducts = Product::latest()->take(5)->get();
+            $view->with('recentProducts', $recentProducts);
+        });
     }
 }

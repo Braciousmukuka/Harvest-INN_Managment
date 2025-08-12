@@ -1,11 +1,160 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+/* HarvestInn custom theme styles */
+.btn-primary {
+    @apply bg-harvest-green hover:bg-harvest-green-dark text-white;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+.btn-secondary {
+    @apply bg-harvest-gold hover:bg-harvest-gold-dark text-white;
+}
+
+.text-primary {
+    @apply text-harvest-green;
+}
+
+.text-secondary {
+    @apply text-harvest-gold;
+}
+
+.border-primary {
+    @apply border-harvest-green;
+}
+
+.border-secondary {
+    @apply border-harvest-gold;
+}
+
+/* Auth form styling */
+.auth-input {
+    @apply w-full px-4 py-2 border border-gray-300 focus:border-harvest-green focus:ring-harvest-green rounded-md shadow-sm;
+}
+
+.auth-label {
+    @apply block font-medium text-sm text-harvest-green;
+}
+
+.auth-btn {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-harvest-green border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-harvest-green-dark focus:bg-harvest-green-dark active:bg-harvest-green focus:outline-none focus:ring-2 focus:ring-harvest-green focus:ring-offset-2 transition ease-in-out duration-150 shadow-md;
+}
+
+.auth-link {
+    @apply text-sm text-harvest-green hover:text-harvest-green-dark hover:underline;
+}
+
+/* Enhanced button visibility */
+.btn-visible {
+    @apply shadow-lg font-bold border-2 !important;
+}
+
+/* Custom checkbox styling */
+input[type="checkbox"] {
+    @apply rounded border-gray-300 text-harvest-green shadow-sm focus:border-harvest-green focus:ring focus:ring-offset-0 focus:ring-harvest-green focus:ring-opacity-30;
+}
+
+/* Dashboard gradient cards */
+.bg-gradient-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+}
+
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.text-white-75 {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.f-28 {
+    font-size: 28px;
+}
+
+/* PWA Install Button Animation */
+#pwa-install-btn, #pwa-install-btn-mobile {
+    animation: pulse 2s infinite;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3) !important;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3) !important;
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4) !important;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3) !important;
+    }
+}
+
+/* PWA Help Button */
+#pwa-help-btn {
+    position: relative;
+}
+
+#pwa-help-btn::after {
+    content: '💾';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 12px;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-3px);
+    }
+    60% {
+        transform: translateY(-2px);
+    }
+}
+
+/* Install Prompt Styling */
+.install-prompt {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
+    animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Mobile PWA buttons styling */
+@media (max-width: 640px) {
+    #pwa-install-btn-mobile {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+        margin: 8px 16px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3) !important;
+    }
 }

@@ -1,0 +1,49 @@
+/* Fix for the landing page */
+header.landing-header {
+  padding: 120px 0;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(360deg, rgb(238, 242, 246) 1.09%, rgb(255, 255, 255) 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+header.landing-header:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("../images/landing/img-header-bg.png");
+  background-position: right bottom;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+header.landing-header > * {
+  position: relative;
+  z-index: 5;
+}
+
+.wow {
+  visibility: visible;
+}
+
+/* Theme color updates */
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+/* Fix for the hero image */
+.hero-image {
+  position: relative;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+}

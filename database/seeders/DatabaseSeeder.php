@@ -19,5 +19,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Call the dashboard data seeder
+        $this->call([
+            DashboardDataSeeder::class,
+        ]);
     }
 }
