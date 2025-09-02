@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
+use App\Models\Sale;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
@@ -64,7 +67,10 @@ class ProductController extends Controller
             'out_of_stock' => Product::where('status', 'out_of_stock')->count(),
         ];
         
-        return view('products.index', compact('products', 'stockStats'));
+        // Get chart data
+        $chartData = $this->getChartData();
+        
+        return view('products.index', compact('products', 'stockStats', 'chartData'));
     }
 
     /**
@@ -151,5 +157,84 @@ class ProductController extends Controller
         
         return redirect()->route('products.index')
             ->with('success', 'Product deleted successfully.');
+    }
+    
+    /**
+     * Get chart data for the products index page
+     */
+    private function getChartData()
+    {
+        // Most sold products (by quantity)
+        $mostSold = Sale::select('products.name', DB::raw('SUM(sales.quantity_sold) as total_quantity'))
+            ->join('products', 'sales.product_id', '=', 'products.id')
+            ->where('sales.status', 'completed')
+            ->groupBy('products.name', 'products.id')
+            ->orderBy('total_quantity', 'desc')
+            ->limit(6)
+            ->get();
+
+        // Monthly sales trend (last 12 months)
+        $monthlySales = [];
+        $monthLabels = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $monthLabels[] = $date->format('M');
+            
+            $monthlyTotal = Sale::whereYear('sale_date', $date->year)
+                ->whereMonth('sale_date', $date->month)
+                ->where('status', 'completed')
+                ->sum('final_amount');
+                
+            $monthlySales[] = round($monthlyTotal, 2);
+        }
+
+        // Category distribution
+        $categoryData = Product::select('category', DB::raw('COUNT(*) as count'))
+            ->groupBy('category')
+            ->orderBy('count', 'desc')
+            ->get();
+
+        // Stock status distribution
+        $stockStatus = [
+            'in_stock' => Product::where('status', 'in_stock')->count(),
+            'low_stock' => Product::where('status', 'low_stock')->count(),
+            'out_of_stock' => Product::where('status', 'out_of_stock')->count(),
+        ];
+
+        // Revenue by product (top 5)
+        $revenueByProduct = Sale::select('products.name', DB::raw('SUM(sales.final_amount) as total_revenue'))
+            ->join('products', 'sales.product_id', '=', 'products.id')
+            ->where('sales.status', 'completed')
+            ->groupBy('products.name', 'products.id')
+            ->orderBy('total_revenue', 'desc')
+            ->limit(5)
+            ->get();
+
+        return [
+            'mostSold' => [
+                'labels' => $mostSold->pluck('name')->toArray(),
+                'data' => $mostSold->pluck('total_quantity')->toArray()
+            ],
+            'monthlySales' => [
+                'labels' => $monthLabels,
+                'data' => $monthlySales
+            ],
+            'categoryDistribution' => [
+                'labels' => $categoryData->pluck('category')->toArray(),
+                'data' => $categoryData->pluck('count')->toArray()
+            ],
+            'stockStatus' => [
+                'labels' => ['In Stock', 'Low Stock', 'Out of Stock'],
+                'data' => [
+                    $stockStatus['in_stock'],
+                    $stockStatus['low_stock'],
+                    $stockStatus['out_of_stock']
+                ]
+            ],
+            'revenue' => [
+                'labels' => $revenueByProduct->pluck('name')->toArray(),
+                'data' => $revenueByProduct->pluck('total_revenue')->toArray()
+            ]
+        ];
     }
 }

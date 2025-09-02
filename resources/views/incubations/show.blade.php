@@ -4,9 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Flash Messages -->
-    <x-flash-messages />
-    
     <!-- Page Header -->
     <div class="page-header mb-4">
         <div class="row align-items-center">

@@ -273,6 +273,20 @@ Route::get('/chart-debug', function () {
     return view('chart-debug', compact('chartData'));
 });
 
+// Test chart data generation for products
+Route::get('/test-product-charts', function () {
+    $controller = new \App\Http\Controllers\ProductController();
+    
+    // Use reflection to call the private method
+    $reflection = new ReflectionClass($controller);
+    $method = $reflection->getMethod('getChartData');
+    $method->setAccessible(true);
+    
+    $chartData = $method->invoke($controller);
+    
+    return response()->json($chartData);
+});
+
 // Auto-login and redirect to dashboard
 Route::get('/auto-login', function () {
     $user = \App\Models\User::first();

@@ -4,9 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Flash Messages -->
-    <x-flash-messages />
-    
     <!-- Page Header -->
     <div class="page-header mb-4">
         <div class="row align-items-center">
@@ -21,15 +18,23 @@
                 </nav>
             </div>
             <div class="col-auto">
-                <div class="btn-group" role="group">
-                    <a href="{{ route('purchases.edit', $purchase) }}" class="btn btn-primary btn-sm">
-                        <i data-feather="edit" style="width: 14px; height: 14px;"></i>
-                        Edit
+                <div class="btn-group" role="group" aria-label="Purchase actions">
+                    <a href="{{ route('purchases.edit', $purchase) }}" class="btn btn-outline-primary btn-sm d-flex align-items-center">
+                        <i data-feather="edit" style="width: 16px; height: 16px;" class="me-1"></i>
+                        <span class="d-none d-sm-inline">Edit Purchase</span>
+                        <span class="d-sm-none">Edit</span>
                     </a>
-                    <a href="{{ route('purchases.index') }}" class="btn btn-secondary btn-sm">
-                        <i data-feather="arrow-left" style="width: 14px; height: 14px;"></i>
-                        Back
+                    <a href="{{ route('purchases.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center">
+                        <i data-feather="arrow-left" style="width: 16px; height: 16px;" class="me-1"></i>
+                        <span class="d-none d-sm-inline">Back to List</span>
+                        <span class="d-sm-none">Back</span>
                     </a>
+                    <!-- Print button -->
+                    <button type="button" class="btn btn-outline-success btn-sm d-flex align-items-center" onclick="window.print()">
+                        <i data-feather="printer" style="width: 16px; height: 16px;" class="me-1"></i>
+                        <span class="d-none d-sm-inline">Print</span>
+                        <span class="d-sm-none">Print</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -148,19 +153,24 @@
                             <div class="text-muted">{{ $purchase->purchase_number }}</div>
                         </div>
                         <div class="col-auto">
-                            <div class="btn-group btn-group-sm">
-                                <a href="{{ route('purchases.edit', $purchase) }}" class="btn btn-outline-primary">
-                                    <i data-feather="edit" style="width: 14px; height: 14px;"></i>
-                                    Edit
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Purchase management">
+                                <a href="{{ route('purchases.edit', $purchase) }}" class="btn btn-outline-primary d-flex align-items-center">
+                                    <i data-feather="edit" style="width: 14px; height: 14px;" class="me-1"></i>
+                                    <span class="d-none d-lg-inline">Edit</span>
                                 </a>
-                                <form method="POST" action="{{ route('purchases.destroy', $purchase) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this purchase?');">
+                                <form method="POST" action="{{ route('purchases.destroy', $purchase) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this purchase? This action cannot be undone.');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger">
-                                        <i data-feather="trash-2" style="width: 14px; height: 14px;"></i>
-                                        Delete
+                                    <button type="submit" class="btn btn-outline-danger d-flex align-items-center">
+                                        <i data-feather="trash-2" style="width: 14px; height: 14px;" class="me-1"></i>
+                                        <span class="d-none d-lg-inline">Delete</span>
                                     </button>
                                 </form>
+                                <!-- Duplicate Purchase -->
+                                <a href="{{ route('purchases.create') }}?duplicate={{ $purchase->id }}" class="btn btn-outline-info d-flex align-items-center" title="Create a copy of this purchase">
+                                    <i data-feather="copy" style="width: 14px; height: 14px;" class="me-1"></i>
+                                    <span class="d-none d-lg-inline">Duplicate</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -304,6 +314,94 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof feather !== 'undefined') {
         feather.replace();
     }
+    
+    // Add hover effects to buttons
+    const buttons = document.querySelectorAll('.btn-group .btn');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-1px)';
+            this.style.transition = 'all 0.2s ease';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
 });
 </script>
+
+<style>
+@media print {
+    .btn-group, .page-header .btn-group {
+        display: none !important;
+    }
+    
+    .page-header {
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .card {
+        border: 1px solid #dee2e6 !important;
+        box-shadow: none !important;
+        margin-bottom: 1rem;
+    }
+    
+    .badge {
+        border: 1px solid currentColor;
+    }
+}
+
+.btn-group .btn {
+    transition: all 0.2s ease;
+    border-radius: 0.375rem;
+    font-weight: 500;
+}
+
+.btn-group .btn:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.btn-group .btn:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.btn-group .btn:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.btn-group .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-outline-info:hover {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #000;
+}
+</style>
 @endpush

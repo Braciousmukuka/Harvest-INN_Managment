@@ -4,9 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Flash Messages -->
-    <x-flash-messages />
-    
     <!-- Page Header -->
     <div class="page-header mb-4">
         <div class="row align-items-center">
@@ -21,14 +18,14 @@
                 </nav>
             </div>
             <div class="col-auto">
-                <div class="btn-group" role="group">
-                    <a href="{{ route('products.edit', $product) }}" class="btn btn-primary btn-sm">
-                        <i data-feather="edit" style="width: 14px; height: 14px;"></i>
-                        Edit
+                <div class="d-flex gap-2">
+                    <a href="{{ route('products.edit', $product) }}" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                        <i data-feather="edit" class="me-1" style="width: 12px; height: 12px;"></i>
+                        Edit Product
                     </a>
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary btn-sm">
-                        <i data-feather="arrow-left" style="width: 14px; height: 14px;"></i>
-                        Back
+                    <a href="{{ route('products.index') }}" class="btn btn-outline-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                        <i data-feather="arrow-left" class="me-1" style="width: 12px; height: 12px;"></i>
+                        Back to List
                     </a>
                 </div>
             </div>
@@ -105,16 +102,16 @@
                             <div class="text-muted">ZMW {{ number_format($product->price, 2) }} {{ $product->price_unit }}</div>
                         </div>
                         <div class="col-auto">
-                            <div class="btn-group btn-group-sm">
-                                <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary">
-                                    <i data-feather="edit" style="width: 14px; height: 14px;"></i>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-primary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                                    <i data-feather="edit" class="me-1" style="width: 12px; height: 12px;"></i>
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('products.destroy', $product) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger">
-                                        <i data-feather="trash-2" style="width: 14px; height: 14px;"></i>
+                                    <button type="submit" class="btn btn-outline-danger" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                                        <i data-feather="trash-2" class="me-1" style="width: 12px; height: 12px;"></i>
                                         Delete
                                     </button>
                                 </form>

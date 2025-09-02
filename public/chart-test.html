@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 600px;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chart.js Test</h1>
+    <div id="status" style="padding: 10px; background: #f0f0f0; margin-bottom: 20px;">
+        Loading...
+    </div>
+    
+    <div class="chart-container">
+        <canvas id="testChart"></canvas>
+    </div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        // Check if Chart.js loaded
+        if (typeof Chart === 'undefined') {
+            statusDiv.innerHTML = '❌ Chart.js failed to load';
+            statusDiv.style.background = '#ffdddd';
+        } else {
+            statusDiv.innerHTML = '✅ Chart.js loaded successfully (Version: ' + (Chart.version || 'unknown') + ')';
+            statusDiv.style.background = '#ddffdd';
+            
+            // Create test chart
+            const ctx = document.getElementById('testChart');
+            if (ctx) {
+                try {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+                            datasets: [{
+                                label: 'Sales',
+                                data: [12, 19, 3, 5],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.8)',
+                                    'rgba(54, 162, 235, 0.8)',
+                                    'rgba(255, 205, 86, 0.8)',
+                                    'rgba(75, 192, 192, 0.8)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 205, 86, 1)',
+                                    'rgba(75, 192, 192, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Test Chart'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                    statusDiv.innerHTML += '<br>✅ Chart created successfully';
+                } catch (error) {
+                    statusDiv.innerHTML += '<br>❌ Error creating chart: ' + error.message;
+                    statusDiv.style.background = '#ffdddd';
+                }
+            } else {
+                statusDiv.innerHTML += '<br>❌ Canvas element not found';
+                statusDiv.style.background = '#ffdddd';
+            }
+        }
+    </script>
+</body>
+</html>

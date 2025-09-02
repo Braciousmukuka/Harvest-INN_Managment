@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexCharts Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+</head>
+<body>
+    <h1>ApexCharts Test</h1>
+    <div id="testChart" style="width: 100%; height: 400px;"></div>
+
+    <script>
+        console.log('Testing ApexCharts...');
+        console.log('ApexCharts loaded:', typeof ApexCharts !== 'undefined');
+
+        if (typeof ApexCharts !== 'undefined') {
+            const options = {
+                series: [{
+                    name: 'Sales',
+                    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+                }],
+                chart: {
+                    type: 'line',
+                    height: 350
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
+                },
+                title: {
+                    text: 'Test Chart',
+                    align: 'center'
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#testChart"), options);
+            chart.render();
+            console.log('ApexCharts test chart rendered successfully');
+        } else {
+            console.error('ApexCharts not loaded');
+            document.getElementById('testChart').innerHTML = '<p style="color: red;">ApexCharts failed to load</p>';
+        }
+    </script>
+</body>
+</html>
