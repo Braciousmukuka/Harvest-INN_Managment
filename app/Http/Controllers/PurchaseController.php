@@ -60,7 +60,9 @@ class PurchaseController extends Controller
 
         Purchase::create($validated);
 
-        return redirect()->route('purchases.index')->with('success', 'Purchase created successfully.');
+        return redirect()->route('purchases.index')
+            ->with('success', 'Purchase created successfully.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     /**
@@ -106,7 +108,9 @@ class PurchaseController extends Controller
 
         $purchase->update($validated);
 
-        return redirect()->route('purchases.index')->with('success', 'Purchase updated successfully.');
+        return redirect()->route('purchases.index')
+            ->with('success', 'Purchase updated successfully.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     /**
@@ -116,6 +120,8 @@ class PurchaseController extends Controller
     {
         $purchase->delete();
 
-        return redirect()->route('purchases.index')->with('success', 'Purchase deleted successfully.');
+        return redirect()->route('purchases.index')
+            ->with('success', 'Purchase deleted successfully.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 }

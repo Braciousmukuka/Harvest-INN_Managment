@@ -17,8 +17,8 @@
                 </nav>
             </div>
             <div class="col-12 col-md-6 text-md-end">
-                <a href="{{ route('products.create') }}" class="btn btn-dark-green btn-sm w-100 w-md-auto" style="background-color: #1e5631; border-color: #1e5631; color: white;">
-                    <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                <a href="{{ route('products.create') }}" class="btn btn-dark-green btn-xs w-100 w-md-auto" style="background-color: #1e5631; border-color: #1e5631; color: white; font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                    <i data-feather="plus" style="width: 14px; height: 14px;"></i>
                     <span class="ms-1">Add Product</span>
                 </a>
             </div>

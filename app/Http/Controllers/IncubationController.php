@@ -67,7 +67,8 @@ class IncubationController extends Controller
         $incubation = Incubation::create($validated);
 
         return redirect()->route('incubations.index')
-            ->with('success', "Incubation batch {$incubation->batch_number} created successfully!");
+            ->with('success', "Incubation batch {$incubation->batch_number} created successfully!")
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     public function show(Incubation $incubation)
@@ -113,7 +114,8 @@ class IncubationController extends Controller
         $incubation->update($validated);
 
         return redirect()->route('incubations.show', $incubation)
-            ->with('success', 'Incubation batch updated successfully!');
+            ->with('success', 'Incubation batch updated successfully!')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     public function destroy(Incubation $incubation)
@@ -122,7 +124,8 @@ class IncubationController extends Controller
         $incubation->delete();
 
         return redirect()->route('incubations.index')
-            ->with('success', "Incubation batch {$batchNumber} deleted successfully!");
+            ->with('success', "Incubation batch {$batchNumber} deleted successfully!")
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     public function updateProgress(Request $request, Incubation $incubation)

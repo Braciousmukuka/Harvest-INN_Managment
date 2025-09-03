@@ -132,7 +132,8 @@ class SaleController extends Controller
         });
         
         return redirect()->route('sales.index')
-            ->with('success', 'Sale created successfully.');
+            ->with('success', 'Sale created successfully.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     /**
@@ -199,7 +200,8 @@ class SaleController extends Controller
             });
             
             return redirect()->route('sales.show', $sale)
-                ->with('success', 'Sale updated successfully.');
+                ->with('success', 'Sale updated successfully.')
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
@@ -226,10 +228,12 @@ class SaleController extends Controller
             });
             
             return redirect()->route('sales.index')
-                ->with('success', 'Sale deleted successfully and product quantity restored.');
+                ->with('success', 'Sale deleted successfully and product quantity restored.')
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
         } catch (\Exception $e) {
             return redirect()->route('sales.index')
-                ->with('error', 'Error deleting sale: ' . $e->getMessage());
+                ->with('error', 'Error deleting sale: ' . $e->getMessage())
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
         }
     }
 

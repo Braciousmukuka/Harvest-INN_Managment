@@ -96,7 +96,8 @@ class ProductController extends Controller
         Product::create($data);
         
         return redirect()->route('products.index')
-            ->with('success', 'Product created successfully.');
+            ->with('success', 'Product created successfully.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     /**
@@ -140,7 +141,8 @@ class ProductController extends Controller
         $product->update($data);
         
         return redirect()->route('products.show', $product->id)
-            ->with('success', 'Product updated successfully.');
+            ->with('success', 'Product updated successfully.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
     /**
@@ -156,7 +158,8 @@ class ProductController extends Controller
         $product->delete();
         
         return redirect()->route('products.index')
-            ->with('success', 'Product deleted successfully.');
+            ->with('success', 'Product deleted successfully.')
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
     
     /**
