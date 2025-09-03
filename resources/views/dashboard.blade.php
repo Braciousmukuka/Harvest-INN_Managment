@@ -80,14 +80,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            @php
-                                $currentYear = date('Y');
-                                $currentMonth = sprintf('%02d', date('n'));
-                                $currentMonthRevenue = \App\Models\Sale::whereRaw("strftime('%Y', created_at) = ?", [$currentYear])
-                                                                    ->whereRaw("strftime('%m', created_at) = ?", [$currentMonth])
-                                                                    ->sum('total_amount') ?? 0;
-                            @endphp
-                            <h4 class="text-c-blue">ZMW {{ number_format($currentMonthRevenue, 0) }}</h4>
+                            <h4 class="text-c-blue">ZMW {{ number_format($salesStats['monthly_revenue'] ?? 0, 0) }}</h4>
                             <h6 class="text-muted m-b-0">Current Month Income</h6>
                         </div>
                         <div class="col-4 text-right">
@@ -106,14 +99,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            @php
-                                $currentYear = date('Y');
-                                $currentMonth = sprintf('%02d', date('n'));
-                                $currentMonthExpenses = \App\Models\Purchase::whereRaw("strftime('%Y', created_at) = ?", [$currentYear])
-                                                                          ->whereRaw("strftime('%m', created_at) = ?", [$currentMonth])
-                                                                          ->sum('total_amount') ?? 0;
-                            @endphp
-                            <h4 class="text-c-yellow">ZMW {{ number_format($currentMonthExpenses, 0) }}</h4>
+                            <h4 class="text-c-yellow">ZMW {{ number_format($purchaseStats['monthly_expenses'] ?? 0, 0) }}</h4>
                             <h6 class="text-muted m-b-0">Current Month Expenses</h6>
                         </div>
                         <div class="col-4 text-right">
@@ -588,22 +574,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const monthlyCtx = document.getElementById('monthlyChart');
     if (monthlyCtx) {
         @php
-            // Get monthly sales data for current year (SQLite compatible)
-            $currentYear = date('Y');
-            $monthlySales = [];
-            $monthlyPurchases = [];
+            // Use chart data from controller instead of direct database queries
+            $monthlySales = $chartData['monthlyFinancials']['revenue'] ?? [];
+            $monthlyPurchases = $chartData['monthlyFinancials']['expenses'] ?? [];
             
-            for ($month = 1; $month <= 12; $month++) {
-                $salesTotal = \App\Models\Sale::whereRaw("strftime('%Y', created_at) = ?", [$currentYear])
-                                             ->whereRaw("strftime('%m', created_at) = ?", [sprintf('%02d', $month)])
-                                             ->sum('total_amount') ?? 0;
-                                             
-                $purchasesTotal = \App\Models\Purchase::whereRaw("strftime('%Y', created_at) = ?", [$currentYear])
-                                                    ->whereRaw("strftime('%m', created_at) = ?", [sprintf('%02d', $month)])
-                                                    ->sum('total_amount') ?? 0;
-                
-                $monthlySales[] = $salesTotal;
-                $monthlyPurchases[] = $purchasesTotal;
+            // Ensure we have 12 months of data
+            while (count($monthlySales) < 12) {
+                $monthlySales[] = 0;
+            }
+            while (count($monthlyPurchases) < 12) {
+                $monthlyPurchases[] = 0;
             }
         @endphp
         

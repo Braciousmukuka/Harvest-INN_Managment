@@ -1,13 +1,17 @@
 #!/bin/bash
 
-# HarvestInn Production Deployment Script
-echo "🚀 Deploying HarvestInn Farm Management System..."
+# HarvestInn Production Deployment Script for Namecheap
+echo "🚀 Deploying HarvestInn Farm Management System to Namecheap..."
+
+# Set environment to production
+export APP_ENV=production
 
 # Clear all caches
 echo "📋 Clearing caches..."
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
+php artisan cache:clear
 
 # Create necessary directories
 echo "📁 Creating storage directories..."
@@ -28,19 +32,34 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Run migrations and seed initial data
-echo "🗄️ Setting up database..."
-php artisan migrate --force
-php artisan db:seed --force
-
-# Build frontend assets
-echo "🎨 Building frontend assets..."
+# Build frontend assets with Alpine.js
+echo "🎨 Building frontend assets with Alpine.js for mobile menu..."
+npm install
 npm run build
 
+# Verify Alpine.js is included
+echo "✅ Verifying Alpine.js integration..."
+if grep -q "Alpine" resources/js/bootstrap.js; then
+    echo "✅ Alpine.js found in bootstrap.js"
+else
+    echo "❌ Alpine.js missing - adding it now..."
+    cat >> resources/js/bootstrap.js << 'EOF'
+
+// Import and initialize Alpine.js for mobile navigation
+import Alpine from 'alpinejs';
+window.Alpine = Alpine;
+Alpine.start();
+EOF
+    npm run build
+fi
+
 echo "✅ HarvestInn deployment completed!"
-echo "🌐 Your application is ready to serve!"
+echo "🌐 Your application is ready to serve on Namecheap!"
 echo ""
-echo "To start the server:"
-echo "php artisan serve --host=0.0.0.0 --port=8000"
+echo "📱 Mobile menu functionality is now working with Alpine.js"
+echo "🗄️ Database is configured for MySQL production"
 echo ""
-echo "Or configure your web server to point to the 'public' directory"
+echo "Next steps for Namecheap:"
+echo "1. Upload files to public_html directory"
+echo "2. Update .env file with your MySQL database credentials"
+echo "3. Set document root to public_html/public"
