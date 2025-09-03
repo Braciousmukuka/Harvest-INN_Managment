@@ -68,7 +68,11 @@ class IncubationController extends Controller
 
         return redirect()->route('incubations.index')
             ->with('success', "Incubation batch {$incubation->batch_number} created successfully!")
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+            ->header('X-Refresh-Required', 'true')
+            ->header('X-CRUD-Operation', 'create');
     }
 
     public function show(Incubation $incubation)
@@ -115,7 +119,11 @@ class IncubationController extends Controller
 
         return redirect()->route('incubations.show', $incubation)
             ->with('success', 'Incubation batch updated successfully!')
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+            ->header('X-Refresh-Required', 'true')
+            ->header('X-CRUD-Operation', 'update');
     }
 
     public function destroy(Incubation $incubation)
@@ -125,7 +133,11 @@ class IncubationController extends Controller
 
         return redirect()->route('incubations.index')
             ->with('success', "Incubation batch {$batchNumber} deleted successfully!")
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+            ->header('X-Refresh-Required', 'true')
+            ->header('X-CRUD-Operation', 'delete');
     }
 
     public function updateProgress(Request $request, Incubation $incubation)

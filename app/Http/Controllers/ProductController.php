@@ -97,7 +97,10 @@ class ProductController extends Controller
         
         return redirect()->route('products.index')
             ->with('success', 'Product created successfully.')
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+            ->header('X-Refresh-Required', 'true');
     }
 
     /**
@@ -142,7 +145,11 @@ class ProductController extends Controller
         
         return redirect()->route('products.show', $product->id)
             ->with('success', 'Product updated successfully.')
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+            ->header('X-Refresh-Required', 'true')
+            ->header('X-CRUD-Operation', 'update');
     }
 
     /**
@@ -159,7 +166,11 @@ class ProductController extends Controller
         
         return redirect()->route('products.index')
             ->with('success', 'Product deleted successfully.')
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+            ->header('X-Refresh-Required', 'true')
+            ->header('X-CRUD-Operation', 'delete');
     }
     
     /**

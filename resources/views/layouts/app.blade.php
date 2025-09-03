@@ -2,13 +2,20 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         
-        <!-- Prevent Caching During Development -->
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <!-- Enhanced Cache Prevention -->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
         <meta http-equiv="Pragma" content="no-cache">
-        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Expires" content="Thu, 01 Jan 1970 00:00:00 GMT">
+        <meta name="robots" content="noindex, nofollow">
+        
+        <!-- Mobile Optimization -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-status-bar-style" content="black-translucent">
 
         <title>@yield('title', config('app.name', 'Laravel'))</title>
 
@@ -511,5 +518,61 @@
                 }
             }
         </style>
+        
+        <!-- Real-time Update Script -->
+        <script>
+        // Enhanced mobile and real-time update handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for refresh headers and force reload if needed
+            const refreshRequired = document.querySelector('meta[name="X-Refresh-Required"]');
+            if (refreshRequired || sessionStorage.getItem('needsRefresh') === 'true') {
+                sessionStorage.removeItem('needsRefresh');
+                setTimeout(() => {
+                    if (!window.location.pathname.includes('/create') && !window.location.pathname.includes('/edit')) {
+                        window.location.reload(true);
+                    }
+                }, 100);
+            }
+            
+            // Handle successful form submissions
+            const successAlert = document.querySelector('.alert-success');
+            if (successAlert && sessionStorage.getItem('formSubmitted') === 'true') {
+                sessionStorage.removeItem('formSubmitted');
+                
+                // Force a complete page refresh after successful operation
+                setTimeout(() => {
+                    const currentUrl = new URL(window.location);
+                    currentUrl.searchParams.set('updated', Date.now());
+                    window.location.href = currentUrl.toString();
+                }, 1500);
+            }
+            
+            // Mark form submissions
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function() {
+                    sessionStorage.setItem('formSubmitted', 'true');
+                    sessionStorage.setItem('needsRefresh', 'true');
+                });
+            });
+            
+            // Mobile-specific optimizations
+            if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                // Prevent zoom on input focus
+                document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], textarea, select').forEach(input => {
+                    input.style.fontSize = '16px';
+                });
+                
+                // Handle app resume
+                document.addEventListener('visibilitychange', function() {
+                    if (!document.hidden && sessionStorage.getItem('needsRefresh') === 'true') {
+                        window.location.reload(true);
+                    }
+                });
+                
+                // Handle touch events for better responsiveness
+                document.addEventListener('touchstart', function() {}, { passive: true });
+            }
+        });
+        </script>
     </body>
 </html>

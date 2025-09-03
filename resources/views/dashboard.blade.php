@@ -48,10 +48,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            @php
-                                $totalRevenue = \App\Models\Sale::sum('total_amount');
-                            @endphp
-                            <h4 class="text-c-green">ZMW {{ number_format($totalRevenue, 0) }}</h4>
+                            <h4 class="text-c-green">ZMW {{ number_format($salesStats['total_revenue'] ?? 0, 0) }}</h4>
                             <h6 class="text-muted m-b-0">Total Amount Made (Total Revenue)</h6>
                         </div>
                         <div class="col-4 text-right">
@@ -67,10 +64,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            @php
-                                $totalExpenses = \App\Models\Purchase::sum('total_amount');
-                            @endphp
-                            <h4 class="text-c-red">ZMW {{ number_format($totalExpenses, 0) }}</h4>
+                            <h4 class="text-c-red">ZMW {{ number_format($purchaseStats['total_amount'] ?? 0, 0) }}</h4>
                             <h6 class="text-muted m-b-0">Total Expenses</h6>
                         </div>
                         <div class="col-4 text-right">
@@ -135,7 +129,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h4 class="text-c-purple">{{ \App\Models\Product::count() }}</h4>
+                            <h4 class="text-c-purple">{{ $stockStats['total'] ?? 0 }}</h4>
                             <h6 class="text-muted m-b-0">Total Products</h6>
                         </div>
                         <div class="col-4 text-right">
@@ -151,7 +145,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h4 class="text-c-orange">{{ \App\Models\Incubation::count() }}</h4>
+                            <h4 class="text-c-orange">{{ $incubationStats['active_batches'] ?? 0 }}</h4>
                             <h6 class="text-muted m-b-0">Active Batches</h6>
                         </div>
                         <div class="col-4 text-right">

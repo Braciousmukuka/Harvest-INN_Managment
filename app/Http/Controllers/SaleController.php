@@ -133,7 +133,11 @@ class SaleController extends Controller
         
         return redirect()->route('sales.index')
             ->with('success', 'Sale created successfully.')
-            ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+            ->header('X-Refresh-Required', 'true')
+            ->header('X-CRUD-Operation', 'create');
     }
 
     /**
@@ -201,7 +205,11 @@ class SaleController extends Controller
             
             return redirect()->route('sales.show', $sale)
                 ->with('success', 'Sale updated successfully.')
-                ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+                ->header('X-Refresh-Required', 'true')
+                ->header('X-CRUD-Operation', 'update');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->withInput()
@@ -229,11 +237,18 @@ class SaleController extends Controller
             
             return redirect()->route('sales.index')
                 ->with('success', 'Sale deleted successfully and product quantity restored.')
-                ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+                ->header('X-Refresh-Required', 'true')
+                ->header('X-CRUD-Operation', 'delete');
         } catch (\Exception $e) {
             return redirect()->route('sales.index')
                 ->with('error', 'Error deleting sale: ' . $e->getMessage())
-                ->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
+                ->header('X-Refresh-Required', 'true');
         }
     }
 

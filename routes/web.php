@@ -317,6 +317,56 @@ Route::get('/dashboard-test', function () {
         ->orderBy('quantity', 'asc')
         ->take(5)
         ->get();
+
+// Debug dashboard to verify data flow
+Route::get('/debug-dashboard', function () {
+    // Use the same data generation as the main dashboard
+    $stockStats = [
+        'total' => \App\Models\Product::count(),
+        'in_stock' => \App\Models\Product::where('status', 'in_stock')->count(),
+        'low_stock' => \App\Models\Product::where('status', 'low_stock')->count(),
+        'out_of_stock' => \App\Models\Product::where('status', 'out_of_stock')->count(),
+    ];
+    
+    $lowStockProducts = \App\Models\Product::where('status', 'low_stock')
+        ->orWhere('status', 'out_of_stock')
+        ->orderBy('quantity', 'asc')
+        ->take(5)
+        ->get();
+    
+    $salesStats = [
+        'total_sales' => \App\Models\Sale::count(),
+        'total_revenue' => \App\Models\Sale::sum('total_amount'),
+        'pending_sales' => \App\Models\Sale::where('payment_status', 'pending')->count(),
+        'completed_sales' => \App\Models\Sale::where('payment_status', 'completed')->count(),
+        'monthly_revenue' => \App\Models\Sale::whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))
+            ->sum('total_amount'),
+        'daily_sales' => \App\Models\Sale::whereDate('created_at', today())->count(),
+    ];
+    
+    $purchaseStats = [
+        'total_purchases' => \App\Models\Purchase::count(),
+        'total_amount' => \App\Models\Purchase::sum('total_amount'),
+        'pending_purchases' => \App\Models\Purchase::where('status', 'pending')->count(),
+        'delivered_purchases' => \App\Models\Purchase::where('status', 'delivered')->count(),
+    ];
+    
+    $incubationStats = [
+        'active_batches' => \App\Models\Incubation::whereIn('status', ['active', 'hatching'])->count(),
+        'total_eggs_incubating' => \App\Models\Incubation::whereIn('status', ['active', 'hatching'])->sum('eggs_placed'),
+        'completed_batches' => \App\Models\Incubation::where('status', 'completed')->count(),
+        'total_hatched' => \App\Models\Incubation::sum('eggs_hatched'),
+    ];
+    
+    return view('debug-dashboard', compact(
+        'lowStockProducts', 
+        'stockStats', 
+        'salesStats', 
+        'purchaseStats', 
+        'incubationStats'
+    ));
+});
     
     // Sales Analytics
     $salesStats = [
